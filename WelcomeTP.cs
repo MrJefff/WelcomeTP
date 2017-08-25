@@ -3,7 +3,7 @@ using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Plugins
 {
-    [Info("WelcomeTP", "Ryan", "1.0.0")]
+    [Info("WelcomeTP", "Ryan", "1.0.1")]
     [Description("Teleports players to a position if they're new")]
 
     class WelcomeTP : CovalencePlugin
@@ -67,7 +67,6 @@ namespace Oxide.Plugins
 
         private void Init()
         {
-            SaveConfig();
             permission.RegisterPermission(_perm, this);
         }
 
