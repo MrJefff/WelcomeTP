@@ -3,7 +3,7 @@ using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Plugins
 {
-    [Info("WelcomeTP", "Ryan", "1.0.2", ResourceId = 2604)]
+    [Info("WelcomeTP", "Ryan", "1.0.3", ResourceId = 2604)]
     [Description("Teleports players to a position if they're new")]
 
     class WelcomeTP : CovalencePlugin
@@ -77,7 +77,7 @@ namespace Oxide.Plugins
         {
             if (!permission.UserHasPermission(player.Id, _perm))
             {
-                player.Teleport(_cFile.Position.X, _cFile.Position.Y, _cFile.Position.Z);
+                player.Teleport(CFile.Position.X, CFile.Position.Y, CFile.Position.Z);
                 permission.GrantUserPermission(player.Id, _perm, this);
                 timer.Once(2f, () =>
                 {
