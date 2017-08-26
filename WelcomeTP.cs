@@ -3,14 +3,14 @@ using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Plugins
 {
-    [Info("WelcomeTP", "Ryan", "1.0.1")]
+    [Info("WelcomeTP", "Ryan", "1.0.2", ResourceId = 2604)]
     [Description("Teleports players to a position if they're new")]
 
     class WelcomeTP : CovalencePlugin
     {
         private string Lang(string key, string id = null, params object[] args) => string.Format(lang.GetMessage(key, this, id), args);
 
-        private static ConfigFile _cFile;
+        private static ConfigFile CFile;
 
         private const string _perm = "welcometp.used";
 
@@ -20,34 +20,37 @@ namespace Oxide.Plugins
         {
             public GenericPosition Position;
 
-            public static ConfigFile DefaultConfig()
+            public ConfigFile()
             {
-                return new ConfigFile
-                {
-                    Position = new GenericPosition(0, 0, 0)
-                };
+                Position = new GenericPosition(0, 0, 0);
             }
         }
 
         protected override void LoadDefaultConfig()
         {
-            Puts("Generating default configuration file...");
-            _cFile = ConfigFile.DefaultConfig();
+            PrintWarning("Generating default configuration file...");
+            CFile = new ConfigFile();
         }
 
         protected override void LoadConfig()
         {
             base.LoadConfig();
-            _cFile = Config.ReadObject<ConfigFile>();
-            if (_cFile.Position == null)
+            try
             {
-                Puts("Regerating configuration file because it was incorrectly formatted");
-                LoadDefaultConfig();
-                SaveConfig();
+                CFile = Config.ReadObject<ConfigFile>();
+                if (CFile == null) Regenerate();
             }
+            catch { Regenerate(); }
         }
 
-        protected override void SaveConfig() => Config.WriteObject(_cFile);
+        protected override void SaveConfig() => Config.WriteObject(CFile);
+
+        private void Regenerate()
+        {
+            PrintWarning($"Configuration file at 'oxide/config/{Name}.json' seems to be corrupt! Regenerating...");
+            CFile = new ConfigFile();
+            SaveConfig();
+        }
 
         #endregion
 
