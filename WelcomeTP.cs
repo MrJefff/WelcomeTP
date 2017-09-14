@@ -3,14 +3,14 @@ using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Plugins
 {
-    [Info("WelcomeTP", "Ryan", "1.0.6", ResourceId = 2604)]
+    [Info("WelcomeTP", "Ryan", "1.0.7", ResourceId = 2604)]
     [Description("Teleports players to a position if they're new")]
 
     class WelcomeTP : CovalencePlugin
     {
         private string Lang(string key, string id = null, params object[] args) => string.Format(lang.GetMessage(key, this, id), args);
 
-        private static ConfigFile CFile;
+        private ConfigFile CFile;
 
         private const string _perm = "welcometp.used";
 
@@ -20,16 +20,19 @@ namespace Oxide.Plugins
         {
             public GenericPosition Position;
 
-            public ConfigFile()
+            public static ConfigFile DefaultConfig()
             {
-                Position = new GenericPosition(0, 0, 0);
+                return new ConfigFile
+                {
+                    Position = new GenericPosition(0, 0, 0)
+                };
             }
         }
 
         protected override void LoadDefaultConfig()
         {
             PrintWarning("Generating default configuration file...");
-            CFile = new ConfigFile();
+            CFile = ConfigFile.DefaultConfig();
         }
 
         protected override void LoadConfig()
@@ -48,7 +51,7 @@ namespace Oxide.Plugins
         private void Regenerate()
         {
             PrintWarning($"Configuration file at 'oxide/config/{Name}.json' seems to be corrupt! Regenerating...");
-            CFile = new ConfigFile();
+            CFile = ConfigFile.DefaultConfig();
             SaveConfig();
         }
 
